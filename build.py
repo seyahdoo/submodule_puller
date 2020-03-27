@@ -10,6 +10,9 @@ with open("version.py", "w", encoding="utf8", errors="ignore") as f:
     f.write("version = \"{}\"".format(version))
 
 print("::set-output name=version::{}".format(version))
+print("::set-output name=app_name::{}".format(settings.app_name))
+print("::set-output name=app_executable_name::{}".format(settings.app_executable_name))
+print("::set-output name=updater_executable_name::{}".format(settings.updater_executable_name))
 
 properties_file_content = ""
 with open("build_properties_template.txt", 'r', encoding='utf8', errors='ignore') as f:
