@@ -43,7 +43,7 @@ def update_app():
             pass
 
         if app_name == settings.app_name:
-            if filename == settings.app_executable_name:
+            if filename == settings.updater_executable_name:
                 print_localized("deleting_updater")
                 # wait for updater to close
                 with open(filename, 'w'):
