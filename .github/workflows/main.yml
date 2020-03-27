@@ -1,0 +1,80 @@
+name: Do Release
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v1
+    - uses: actions/setup-node@v1
+    - uses: actions/setup-python@v1
+      with:
+        python-version: '3.7.x'
+
+    - name: Install Semantic Release Tool
+      run: npm install --global standard-version
+
+    - name: Configure Git
+      run: |
+        git config --global user.email "ci@ci.com"
+        git config --global user.name "Continuous Integration"
+
+    - name: Reattach HEAD
+      run: git checkout "$(echo ${{ github.ref }} | sed -E 's|refs/[a-zA-Z]+/||')"
+
+    - name: Calculate and Push Version Tag
+      run: standard-version.cmd
+
+    - name: Push Chores
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Install Pypiwin32
+      run: pip install pypiwin32
+
+    - name: Install Requests
+      run: pip install requests
+      
+    - name: Install VDF
+      run: pip install vdf
+
+    - name: Install Pyinstaller
+      run: pip install pyinstaller
+
+    - name: Call Build Script
+      id: build_script
+      run: python.exe .\build.py
+
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1.0.0
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        release_name: Tabletop Turkeyifier ${{ steps.build_script.outputs.version }}
+        tag_name: ${{ steps.build_script.outputs.version }}
+        draft: false
+        prerelease: false
+
+    - name: Upload Release Asset Excecutable
+      uses: actions/upload-release-asset@v1.0.1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./dist/tabletop-turkeyifier.exe
+        asset_name: tabletop-turkeyifier.exe
+        asset_content_type: application/exe
+
+    - name: Upload Release Asset Updater
+      uses: actions/upload-release-asset@v1.0.1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./dist/tabletop-turkeyifier-updater.exe
+        asset_name: tabletop-turkeyifier-updater.exe
+        asset_content_type: application/exe
+
