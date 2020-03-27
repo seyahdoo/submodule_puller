@@ -59,13 +59,13 @@ jobs:
         prerelease: false
 
     - name: Upload Release Asset Excecutable
-      uses: actions/upload-release-asset@v1.0.1
+      uses: actions/upload-release-asset@v1.0.1 
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./dist/${{ steps.create_release.outputs.app_executable_name }}
-        asset_name: ${{ steps.create_release.outputs.app_executable_name }}
+        asset_path: ./dist/${{ steps.build_script.outputs.app_executable_name }}
+        asset_name: ${{ steps.build_script.outputs.app_executable_name }}
         asset_content_type: application/exe
 
     - name: Upload Release Asset Updater
@@ -74,7 +74,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./dist/${{ steps.create_release.outputs.updater_executable_name }}
-        asset_name: ${{ steps.create_release.outputs.updater_executable_name }}
+        asset_path: ./dist/${{ steps.build_script.outputs.updater_executable_name }}
+        asset_name: ${{ steps.build_script.outputs.updater_executable_name }}
         asset_content_type: application/exe
 
