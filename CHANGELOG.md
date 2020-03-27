@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.5](https://github.com/seyahdoo/submodule_puller/compare/v1.0.4...v1.0.5) (2020-03-27)
+
+
+### Bug Fixes
+
+* **test:** updater test ([f467f51](https://github.com/seyahdoo/submodule_puller/commit/f467f51c57429bf59213d75f7a489d530b802fa5))
+
 ### [1.0.4](https://github.com/seyahdoo/submodule_puller/compare/v1.0.3...v1.0.4) (2020-03-27)
 
 
