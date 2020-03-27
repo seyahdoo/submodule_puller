@@ -3,6 +3,7 @@ import os
 from typing import List
 import colorama
 from colorama import Fore, Back, Style
+import util
 
 nothing_to_commit_msg = "nothing to commit, working tree clean"
 
@@ -67,7 +68,7 @@ def smart_pull_repo(repo_path: str):
 
 def do_process():
     colorama.init()
-    path = os.path.dirname(os.path.abspath(__file__))
+    path = util.get_application_path()
     for repo in os.listdir(path):
         repo_path = os.path.join(path, repo)
         if os.path.isdir(repo_path):

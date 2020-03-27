@@ -3,6 +3,15 @@ import time
 import msvcrt
 import requests
 import win32api
+import os
+
+
+def get_application_path():
+    # determine if application is a script file or frozen exe
+    if getattr(sys, 'frozen', False):
+        return os.path.dirname(sys.executable)
+    elif __file__:
+        return os.path.dirname(__file__)
 
 
 def get_non_specialized_string(string):
@@ -29,7 +38,7 @@ def wait_enter_or_seconds(caption, timeout=5):
     return input_string
 
 
-def download_with_progress(url,save_path):
+def download_with_progress(url, save_path):
 
     with open(save_path, "wb") as f:
         print("Downloading %s" % save_path)

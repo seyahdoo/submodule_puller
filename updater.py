@@ -1,9 +1,8 @@
 import json
 import os
-
 import requests
 from localization import print_localized
-from util import download_with_progress, get_file_properties
+from util import download_with_progress, get_file_properties, get_application_path
 from version import version
 import settings
 
@@ -34,8 +33,8 @@ def get_latest_release():
 def update_app():
 
     # delete old updater if there is any
-    for filename in os.listdir():
-        props = get_file_properties(filename)
+    for filename in os.listdir(get_application_path()):
+        props = get_file_properties(os.path.join(get_application_path(), filename))
         app_name = None
         try:
             app_name = props["StringFileInfo"]["ProductName"]
@@ -46,9 +45,9 @@ def update_app():
             if filename == settings.updater_executable_name:
                 print_localized("deleting_updater")
                 # wait for updater to close
-                with open(filename, 'w'):
+                with open(os.path.join(get_application_path(), filename), 'w'):
                     pass
-                os.remove(filename)
+                os.remove(os.path.join(get_application_path(), filename))
                 return True
 
     release = get_latest_release()
@@ -62,13 +61,13 @@ def update_app():
         # download all it's assets
         for asset in release["assets"]:
             if asset["name"] == settings.updater_executable_name:
-                download_with_progress(asset["browser_download_url"], asset["name"])
+                download_with_progress(asset["browser_download_url"], os.path.join(get_application_path(), asset["name"]))
                 exec_name = asset["name"]
 
         # start new version and exit program
         if exec_name is not None:
             print_localized("starting_updater")
-            os.startfile(exec_name)
+            os.startfile(os.path.join(get_application_path(), exec_name))
             exit(0)
         else:
             print_localized("problem_downloading_new_ver")
@@ -78,7 +77,7 @@ def update_app():
 if __name__ == "__main__":
 
     # Delete old versions if exists in same folder
-    for filename in os.listdir():
+    for filename in os.listdir(get_application_path()):
         props = get_file_properties(filename)
         app_name = None
         try:
@@ -97,9 +96,9 @@ if __name__ == "__main__":
                 if prod_ver < version:
                     print_localized("deleting_old_ver")
                     # wait for old version to close
-                    with open(filename, 'w'):
+                    with open(os.path.join(get_application_path(), filename), 'w'):
                         pass
-                    os.remove(filename)
+                    os.remove(os.path.join(get_application_path(), filename))
 
     # download new version
     release = get_latest_release()
@@ -108,12 +107,12 @@ if __name__ == "__main__":
     # download executable
     for asset in release["assets"]:
         if asset["name"] == settings.app_executable_name:
-            download_with_progress(asset["browser_download_url"], asset["name"])
+            download_with_progress(asset["browser_download_url"], os.path.join(get_application_path(), asset["name"]))
             exec_name = asset["name"]
 
     # open new version
     if exec_name is not None:
         print_localized("starting_new_version")
-        os.startfile(exec_name)
+        os.startfile(os.path.join(get_application_path(), exec_name))
         exit(0)
 
