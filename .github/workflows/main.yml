@@ -31,14 +31,8 @@ jobs:
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Install Pypiwin32
-      run: pip install pypiwin32
-
-    - name: Install Requests
-      run: pip install requests
-      
-    - name: Install VDF
-      run: pip install vdf
+    - name: Install Requirements
+      run: pip install -r requirements.txt
 
     - name: Install Pyinstaller
       run: pip install pyinstaller
