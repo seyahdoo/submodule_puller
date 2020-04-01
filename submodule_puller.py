@@ -42,7 +42,7 @@ def smart_pull_repo(repo_path: str):
 
     # get submodules
     result_str = run(['git', 'submodule'])
-    submodules = strip(result_str.split('\n'))
+    submodules: List = strip(result_str.split('\n'))
     submodules = [strip(i.split(' '))[1] for i in submodules]
 
     # for each submodule
@@ -51,8 +51,10 @@ def smart_pull_repo(repo_path: str):
         smart_pull_repo(submodule_path)
 
     # commit submodule updates
-    run(['git', 'add', '.'])
-    run(['git', 'commit', '-m', 'submodule update'])
+    if len(submodules) > 0:
+        for submodule in submodules:
+            run(['git', 'add', submodule])
+        run(['git', 'commit', '-m', 'submodule update'])
 
     # push submodule updates
     run(['git', 'push'])
